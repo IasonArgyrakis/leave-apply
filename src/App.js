@@ -8,7 +8,8 @@ import './App.css';
 import Navbar from "./components/Navbar/Navbar";
 
 import LeaveSubmissions from "./components/leaveSubmissions/leaveSubmissions";
-import loginForm from "./components/users/loginForm";
+
+import LeaveSubmissionForm from "./components/leaveSubmissions/LeaveSubmissionForm";
 
 function App() {
     return (
@@ -19,8 +20,8 @@ function App() {
 
 
                 <Routes>
-                    <Route path='/home' element={<Home/>}/>
-                    <Route path='/admin' element={<About/>}/>
+                    <Route path='/all-requests' element={<Home/>}/>
+                    <Route path='/new-request' element={<NewRequest/>}/>
                 </Routes>
             </div>
 
@@ -32,8 +33,8 @@ function Home() {
     return <div className="text-white row col-sm-12"><LeaveSubmissions/></div>;
 }
 
-function About() {
-    return <h2 className="text-white">Home</h2>;
+function NewRequest() {
+    return <div className="text-white row col-sm-12"><LeaveSubmissionForm/></div>;
 }
 
 function Users() {

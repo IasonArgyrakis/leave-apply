@@ -1,3 +1,5 @@
+import {Link} from "react-router-dom";
+
 function LeaveSubmissions() {
     const dummydatda = [
         {
@@ -33,6 +35,10 @@ function LeaveSubmissions() {
     ]
 
     return (<div>
+
+
+        <Link className="btn btn-primary" to='/new-request'>New Request</Link>
+
         {dummydatda.map(item => {
             return (
                 <div className="card my-1">
