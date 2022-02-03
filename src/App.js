@@ -2,23 +2,25 @@ import React from "react";
 import {
     BrowserRouter as Router,
     Routes,
-    Route
+    Route,
 } from "react-router-dom";
 import './App.css';
 import Navbar from "./components/Navbar/Navbar";
 
-import LeaveSubmissions from "./components/leaveSubmissions/leaveSubmissions";
+import LeaveSubmissions from "./components/leaveSubmissions/LeaveSubmissions";
 
 import LeaveSubmissionForm from "./components/leaveSubmissions/LeaveSubmissionForm";
 import Login from "./components/login/login";
 import Register from "./components/register/register";
 import {useSelector} from "react-redux";
-
+import Users from "./components/users/users";
+import LeaveSubmissionsAdmin from "./components/leaveSubmissions/LeaveSubmissionsAdmin";
 
 
 function App() {
 
-const counter = useSelector(state => state.counter)
+    const counter = useSelector(state => state.counter)
+    const login = useSelector(state => state.logged)
 
     return (
         <Router>
@@ -27,13 +29,14 @@ const counter = useSelector(state => state.counter)
                 <Navbar/>
 
 
-
                 <Routes>
-                    <Route path='/all-requests' element={<Home/> }/>
-                    <Route path='/new-request' element={<NewRequest/>}/>
+                    <Route path='/' element={<Home/>}/>
+                    <Route path='/all-my-requests' element={<LeaveSubmissions/>}/>
+                    <Route path='/new-request' element={<LeaveSubmissionForm/>}/>
                     <Route path='/login' element={<Login/>}/>
                     <Route path='/register' element={<Register/>}/>
-                    <Route path='/counter' element={<h2 className={'text-white'}>{counter}</h2>}/>
+                    <Route path='/users' element={<Users/>}/>
+                    <Route path='/all-pending-requests' element={<LeaveSubmissionsAdmin/>}/>
                 </Routes>
             </div>
 
@@ -41,16 +44,24 @@ const counter = useSelector(state => state.counter)
     );
 }
 
-function Home() {
-    return <div className="text-white row col-sm-12"><LeaveSubmissions/></div>;
+function Home(props) {
+    const login = useSelector(state => state.logged)
+
+
+    if (login.token === undefined) {
+        return (<Login/>)
+    } else {
+        return (<div className=" text-white row col-sm-12"><LeaveSubmissions/></div>)
+    }
+    ;
 }
+
+
 
 function NewRequest() {
-    return <div className="text-white row col-sm-12"><LeaveSubmissionForm/></div>;
+    return <div className=" container text-white row col-sm-12"><LeaveSubmissionForm/></div>;
 }
 
-function Users() {
-    return <h2>Users</h2>;
-}
+
 
 export default App;

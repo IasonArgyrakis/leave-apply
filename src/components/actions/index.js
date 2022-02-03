@@ -4,3 +4,17 @@ export const logged = (data)=>{
         payload:data
     }
 }
+
+export const allApplications = (data)=>{
+    return {
+        type: "allApplications",
+        payload:data
+    }
+}
+
+export const CurrentUserApplications = (data)=>{
+    return {
+        type: "CurrentUserApplications",
+        payload:data
+    }
+}

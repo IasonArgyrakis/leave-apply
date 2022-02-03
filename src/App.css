@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 }
+html, body, #root {
+  min-height: max-content;
+  height: 100%;
+}

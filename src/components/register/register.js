@@ -1,9 +1,12 @@
 import React from "react";
 import axios from "axios";
+import {useDispatch, useSelector} from "react-redux";
+import {logged} from "../actions";
 
 const Register = () => {
-    const [UserToken, setUserToken] = React.useState(undefined)
 
+    const login = useSelector(state => state.logged)
+    const dispatch = useDispatch()
 
     const [firstName, setfirstName] = React.useState(undefined)
     const [lastName, setlastName] = React.useState(undefined)
@@ -13,6 +16,28 @@ const Register = () => {
     const [type, setType] = React.useState(undefined)
 
     const [backendErrors, setBackendErrors] = React.useState(false)
+
+    const handleChange = (event) => {
+        event.preventDefault()
+        switch (event.target.type) {
+            case 'email':
+                setEmail(event.target.value)
+                break;
+            case 'firstName':
+                setfirstName(event.target.value)
+            case 'lastName':
+                setlastName(event.target.value)
+            case 'password':
+                setPassword(event.target.value)
+            case 'confirm_password':
+                setConfirm_password(event.target.value)
+            case 'type':
+                setType(event.target.value)
+                break;
+
+        }
+
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault()
@@ -26,36 +51,34 @@ const Register = () => {
 
         let config = {headers: {Accept: "application/json"}};
         let data = {
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                password: password,
-                confirm_password: confirm_password,
-                type: type
-            }
-            console.log(data);
-
-        if(data.password===data.confirm_password) {
-
-            axios
-                .post('http://localhost/api/register/', data, config)
-                .then(function (response) {
-
-                    console.log(response.data)
-
-                })
-                .catch(function (errors) {
-                    console.log(errors.errors);
-
-                });
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: password,
+            confirm_password: confirm_password,
+            type: type
         }
-        else {
-            console.log("passwords dont match")
-        }
+        console.log(data);
+
+
+        axios
+            .post('http://localhost/api/register/', data, config)
+            .then(async function (response) {
+                console.log(response)
+                 dispatch(logged(response.data))
+                if (response.status === 200) {
+                    window.location.replace("http://localhost:3000/login")
+                }
+
+
+            })
+            .catch(function (errors) {
+                console.log(errors);
+
+            });
 
 
     }
-
 
 
     return (
@@ -72,13 +95,13 @@ const Register = () => {
                             <div className="row mb-1">
                                 <div className="col-xs-6 col-sm-6 col-md-6">
                                     <div className="form-group">
-                                        <input type="text" name="first_name" id="firstName"
+                                        <input type="text" name="first_name" onChange={handleChange} id="firstName"
                                                className="form-control input-sm" placeholder="First Name"/>
                                     </div>
                                 </div>
                                 <div className="col-xs-6 col-sm-6 col-md-6">
                                     <div className="form-group">
-                                        <input type="text" name="last_name" id="lastName"
+                                        <input type="text" name="last_name" id="lastName" onChange={handleChange}
                                                className="form-control input-sm" placeholder="Last Name"/>
                                     </div>
                                 </div>
@@ -86,27 +109,29 @@ const Register = () => {
 
                             <div className="form-group mb-1">
                                 <input type="email" name="email" id="email" className="form-control input-sm"
+                                       onChange={handleChange}
                                        placeholder="Email Address"/>
                             </div>
 
                             <div className="row mb-1">
                                 <div className="col-xs-6 col-sm-6 col-md-6 mb-1">
                                     <div className="form-group">
-                                        <input type="password" name="password" id="password"
-                                               className="form-control input-sm"   minlength="8" placeholder="Password"/>
+                                        <input type="password" name="password" id="password" onChange={handleChange}
+                                               className="form-control input-sm" minLength="8" placeholder="Password"/>
                                     </div>
                                 </div>
                                 <div className="col-xs-6 col-sm-6 col-md-6 mb-1">
                                     <div className="form-group">
-                                        <input type="password" name="password_confirmation"
-                                               id="password_confirmation"  minlength="8"  className="form-control input-sm"
+                                        <input type="password" name="password_confirmation" onChange={handleChange}
+                                               id="password_confirmation" minLength="8"
+                                               className="form-control input-sm"
                                                placeholder="Confirm Password"/>
                                     </div>
                                 </div>
                             </div>
                             <div className="form-group mb-2">
                                 <label htmlFor="exampleFormControlSelect1">User Type</label>
-                                <select className="form-control" id="type">
+                                <select className="form-control" id="type" onChange={handleChange}>
                                     <option value="admin">Administrator</option>
                                     <option value="employee">Employee</option>
 
