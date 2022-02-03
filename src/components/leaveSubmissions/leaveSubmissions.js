@@ -1,45 +1,46 @@
 import {Link} from "react-router-dom";
+import axios from "axios";
+import {logged} from "../actions";
+import {useSelector} from "react-redux";
+import React from "react";
 
 function LeaveSubmissions() {
-    const dummydatda = [
-        {
-            "start": "2022-10-1",
-            "end": "2022-10-3",
-            "count": "2",
-            "status": "pending",
-            "reason": "Summer0",
-        },
-        {
-            "start": "2022-10-1",
-            "end": "2022-10-3",
-            "count": "2",
-            "status": "approved",
-            "reason": "Summer1",
-        },
-        {
-            "start": "2022-10-1",
-            "end": "2022-10-3",
-            "count": "2",
-            "status": "denied",
-            "reason": "Summer2",
-        },
-        {
-            "start": "2022-10-1",
-            "end": "2022-10-3",
-            "count": "2",
-            "status": "approved",
-            "reason": "Summer3",
+    const [submissions, setSubmissions] = React.useState([])
+
+    const login = useSelector(state=>state.logged)
+
+
+
+
+    React.useEffect(() => {
+        if (login.token) {
+            let config = {headers: {Accept: "application/json",Authorization: "Bearer "+login.token}};
+            axios
+                .get('http://localhost/api/my-applications', config)
+                .then(function (response) {
+
+                    console.log(response.data)
+                    setSubmissions(response.data)
+
+                })
+                .catch(function (errors) {
+                    console.log(errors.errors);
+
+                });
         }
 
+    }, []);
 
-    ]
+
+
+
 
     return (<div>
 
 
         <Link className="btn btn-primary" to='/new-request'>New Request</Link>
 
-        {dummydatda.map(item => {
+        {submissions.map(item => {
             return (
                 <div className="card my-1">
                     <div className="card-body hx-1">

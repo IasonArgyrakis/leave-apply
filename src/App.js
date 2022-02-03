@@ -10,8 +10,16 @@ import Navbar from "./components/Navbar/Navbar";
 import LeaveSubmissions from "./components/leaveSubmissions/leaveSubmissions";
 
 import LeaveSubmissionForm from "./components/leaveSubmissions/LeaveSubmissionForm";
+import Login from "./components/login/login";
+import Register from "./components/register/register";
+import {useSelector} from "react-redux";
+
+
 
 function App() {
+
+const counter = useSelector(state => state.counter)
+
     return (
         <Router>
             <div className="container ">
@@ -19,9 +27,13 @@ function App() {
                 <Navbar/>
 
 
+
                 <Routes>
-                    <Route path='/all-requests' element={<Home/>}/>
+                    <Route path='/all-requests' element={<Home/> }/>
                     <Route path='/new-request' element={<NewRequest/>}/>
+                    <Route path='/login' element={<Login/>}/>
+                    <Route path='/register' element={<Register/>}/>
+                    <Route path='/counter' element={<h2 className={'text-white'}>{counter}</h2>}/>
                 </Routes>
             </div>
 

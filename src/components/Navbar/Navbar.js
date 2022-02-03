@@ -8,8 +8,8 @@ function Navbar() {
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
             </button>
-            <div className="collapse navbar-collapse" id="navbarNav">
-                <ul className="navbar-nav">
+            <div className="collapse navbar-collapse " id="navbarNav">
+                <ul className="navbar-nav mr-auto">
                     <li className="nav-item active">
                         <Link className="nav-link" to='/all-requests'>my Requests <span className="sr-only">(current)</span></Link>
 
@@ -24,6 +24,8 @@ function Navbar() {
                     </li>
 
                 </ul>
+                <Link className="nav-link" to='/login'>Login </Link>
+                <Link className="nav-link" to='/register'>Register</Link>
             </div>
         </nav>
     )
