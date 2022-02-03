@@ -7,13 +7,14 @@ import React from "react";
 function LeaveSubmissions() {
     const [submissions, setSubmissions] = React.useState([])
 
+
     const login = useSelector(state=>state.logged)
 
 
 
-
     React.useEffect(() => {
-        if (login.token) {
+        console.log(login)
+
             let config = {headers: {Accept: "application/json",Authorization: "Bearer "+login.token}};
             axios
                 .get('http://localhost/api/my-applications', config)
@@ -27,7 +28,7 @@ function LeaveSubmissions() {
                     console.log(errors.errors);
 
                 });
-        }
+
 
     }, []);
 
