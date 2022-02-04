@@ -11,12 +11,17 @@ function LeaveSubmissionForm() {
     const [endDate, setEndDate] = React.useState(undefined)
     const [reason, setReason] = React.useState(undefined)
 
+    const [submited, setSubmited] = React.useState(false)
+
 
 
     const handleChange = (event) => {
         event.preventDefault()
 
-        switch (event.target.type) {
+        setSubmited(false)
+
+
+        switch (event.target.id) {
             case 'startDate':
 
                 setStartDate(event.target.value)
@@ -29,7 +34,16 @@ function LeaveSubmissionForm() {
                 break;
 
         }
-        console.log(reason)
+
+
+    }
+    function renderSumbition() {
+        if(submited){
+            setTimeout(()=>(setSubmited(false)), 1000)
+            return (<div className=" mt-2 alert alert-success" role="alert">
+              Request Submitted
+            </div>)
+        }
 
     }
 
@@ -55,6 +69,7 @@ function LeaveSubmissionForm() {
             .then(function (response) {
 
                 console.log(response.data)
+                setSubmited(true)
 
 
             })
@@ -68,17 +83,19 @@ function LeaveSubmissionForm() {
 
     }
 
+
+
     return (
         <div className="row p-2">
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                    <label htmlFor="startDate" className="text-white form-label"> {reason} Start Date</label>
+                    <label htmlFor="startDate" className="text-white form-label"> Start Date</label>
                     <input required type="date" onChange={handleChange}   className="form-control" id="startDate" aria-describedby="startDate"/>
 
                 </div>
                 <div className="mb-3">
-                    <label htmlFor="endDate" className="form-label">End Date</label>
-                    <input  required type="date" onChange={handleChange} className="form-control" id="endDate" aria-describedby="endDate"/>
+                    <label  htmlFor="endDate" className="form-label">End Date</label>
+                    <input  required min={startDate} id="endDate" type="date" onChange={handleChange} className="form-control"  aria-describedby="endDate"/>
                 </div>
                 <div className="mb-3">
                     <textarea required  id="reason" onChange={handleChange} name="Reason" cols="40" placeholder="reason" rows="5"/>
@@ -86,6 +103,7 @@ function LeaveSubmissionForm() {
 
                 <button type="submit" className="btn btn-primary">Submit</button>
             </form>
+            {renderSumbition()}
         </div>)
 }
 

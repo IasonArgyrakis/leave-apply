@@ -19,7 +19,7 @@ const Register = () => {
 
     const handleChange = (event) => {
         event.preventDefault()
-        switch (event.target.type) {
+        switch (event.target.id) {
             case 'email':
                 setEmail(event.target.value)
                 break;
@@ -66,9 +66,7 @@ const Register = () => {
             .then(async function (response) {
                 console.log(response)
                  dispatch(logged(response.data))
-                if (response.status === 200) {
-                    window.location.replace("http://localhost:3000/login")
-                }
+
 
 
             })

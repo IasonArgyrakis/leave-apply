@@ -31,6 +31,31 @@ function LeaveSubmissions() {
 
     }, []);
 
+    function days_between(date1, date2) {
+
+        return (Date.parse(date2) - Date.parse(date1)) / (24 * 3600 * 1000)
+
+    }
+
+    function convertSubmisionDate(dateSttring) {
+        return new Date(dateSttring).toISOString().slice(0, 10)
+    }
+
+    const renderRow = (item, index) => {
+
+        return (
+            <tr>
+                <td>{index + 1}</td>
+                <td>{convertSubmisionDate(item.created_at)}</td>
+                <td>{item.start}</td>
+                <td>{item.end}</td>
+                <td>{days_between(item.start, item.end)}</td>
+                <td>{item.status}</td>
+                <td>{item.reason}</td>
+
+            </tr>)
+    }
+
 
     return (<div>
 
@@ -42,28 +67,41 @@ function LeaveSubmissions() {
             <Link className="btn btn-primary" to='/new-request'>New Request</Link>
             {
                 submissions.length > 0 ?
-                    submissions.map(item => {
-                        function days_between(date1, date2) {
-
-                            return (Date.parse(date2) - Date.parse(date1)) / (24 * 3600 * 1000)
-
-                        }
-
-                        return (
-                            <div className="card my-1">
-                                <div className="card-body hx-1">
-                                    <div className="d-flex flex-row justify-content-evenly ">
-                                        <h5 className=" mx-auto text-dark">{item.start}</h5>
-                                        <h5 className=" mx-auto text-dark">{item.end}</h5>
-                                        <h5 className=" mx-auto text-dark">{days_between(item.start, item.end)}</h5>
-                                        <h5 className=" mx-auto text-dark">{item.status}</h5>
-                                        <h5 className=" mx-auto text-dark ">{item.reason}</h5>
-                                        <div/>
-                                    </div>
+                    <div className=" my-1">
+                        <div className=" hx-1">
+                            <div className="d-flex flex-row justify-content-evenly ">
+                                <div className="col-sm-12">
+                                    <table className="table table-borderless bg-white">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Requested</th>
+                                              <th scope="col">Start</th>
+                                            <th scope="col">End</th>
+                                            <th scope="col"> Days</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Reason</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {
+                                            submissions.map((item,index) => {
+                                                return renderRow(item,index)
+                                            })
+                                        }
+                                        </tbody>
+                                    </table>
                                 </div>
-                            </div>)
-                    }) : <div className=" mt-2 alert alert-primary" role="alert">
-                        User has no applications
+
+
+                                <div/>
+                            </div>
+                        </div>
+                    </div>
+
+                    :
+                    <div className=" mt-2 alert alert-primary" role="alert">
+                        User has No applications
                     </div>
             }
 
