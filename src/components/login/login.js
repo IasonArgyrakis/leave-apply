@@ -17,7 +17,7 @@ function Login() {
         event.preventDefault()
         switch (event.target.type) {
             case 'email':
-                console.log(event.target.value)
+                //console.log(event.target.value)
                 setEmail(event.target.value)
                 break;
             case 'password':
@@ -43,13 +43,13 @@ function Login() {
 
         }
 
-        console.log(data);
+        //console.log(data);
 
         axios
             .post('http://localhost/api/login/', data, config)
             .then(function (response) {
 
-                console.log(response.data)
+                //console.log(response.data)
                 dispatch(logged(response.data))
 
             })
@@ -75,7 +75,7 @@ function Login() {
 
 
                 setLoginErrors(loginError)
-                console.log(loginError)
+                //console.log(loginError)
 
             });
 
@@ -87,14 +87,16 @@ function Login() {
         let errors = loginErrors.data.errors
 
         if (errors !==undefined) {
+            let Errors=[]
             errors.map(error => {
-                console.log(error)
-                return (
+                //console.log(error)
+                Errors.push(
                     <div className={loginErrors.cssClass} role="alert">
                         {error}
                     </div>
                 )
             })
+            return Errors
 
 
         } else {

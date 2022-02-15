@@ -12,29 +12,56 @@ function LeaveSubmissions() {
 
 
     React.useEffect(() => {
-        console.log(login)
+        //console.log(login)
 
         let config = {headers: {Accept: "application/json", Authorization: "Bearer " + login.token}};
         axios
             .get('http://localhost/api/my-applications', config)
             .then(function (response) {
 
-                console.log(response.data)
+                //console.log(response.data)
                 setSubmissions(response.data)
 
             })
             .catch(function (errors) {
-                console.log(errors.errors);
+                //console.log(errors.errors);
 
             });
 
 
     }, []);
 
-    function days_between(date1, date2) {
+    function calcBusinessDays(dDate1S, dDate2S) {
 
-        return (Date.parse(date2) - Date.parse(date1)) / (24 * 3600 * 1000)
+        if(dDate1S===dDate2S)return 1
+        let  dDate1=new Date(Date.parse(dDate1S))
+        let dDate2= new Date(Date.parse(dDate2S))
 
+
+
+        // input given as Date objects
+        var iWeeks, iDateDiff, iAdjust = 0;
+        if (dDate2 < dDate1) return -1; // error code if dates transposed
+        var iWeekday1 = dDate1.getDay(); // day of week
+        var iWeekday2 = dDate2.getDay();
+        iWeekday1 = (iWeekday1 == 0) ? 7 : iWeekday1; // change Sunday from 0 to 7
+        iWeekday2 = (iWeekday2 == 0) ? 7 : iWeekday2;
+        if ((iWeekday1 > 5) && (iWeekday2 > 5)) iAdjust = 1; // adjustment if both days on weekend
+        iWeekday1 = (iWeekday1 > 5) ? 5 : iWeekday1; // only count weekdays
+        iWeekday2 = (iWeekday2 > 5) ? 5 : iWeekday2;
+
+        // calculate differnece in weeks (1000mS * 60sec * 60min * 24hrs * 7 days = 604800000)
+        iWeeks = Math.floor((dDate2.getTime() - dDate1.getTime()) / 604800000)
+
+        if (iWeekday1 < iWeekday2) { //Equal to makes it reduce 5 days
+            iDateDiff = (iWeeks * 5) + (iWeekday2 - iWeekday1)
+        } else {
+            iDateDiff = ((iWeeks + 1) * 5) - (iWeekday1 - iWeekday2)
+        }
+
+        iDateDiff -= iAdjust // take into account both days on weekend
+
+        return (iDateDiff + 1); // add 1 because dates are inclusive
     }
 
     function convertSubmisionDate(dateSttring) {
@@ -49,7 +76,7 @@ function LeaveSubmissions() {
                 <td>{convertSubmisionDate(item.created_at)}</td>
                 <td>{item.start}</td>
                 <td>{item.end}</td>
-                <td>{days_between(item.start, item.end)}</td>
+                <td>{calcBusinessDays(item.start, item.end)}</td>
                 <td>{item.status}</td>
                 <td>{item.reason}</td>
 

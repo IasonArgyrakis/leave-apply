@@ -12,19 +12,19 @@ function Users() {
 
 
     React.useEffect(() => {
-        console.log(login)
+        //console.log(login)
 
         let config = {headers: {Accept: "application/json", Authorization: "Bearer " + login.token}};
         axios
             .get('http://localhost/api/users', config)
             .then(function (response) {
 
-                console.log(response.data)
+                //console.log(response.data)
                 setUsers(response.data)
 
             })
             .catch(function (errors) {
-                console.log(errors.errors);
+                //console.log(errors.errors);
 
             });
 
@@ -38,10 +38,11 @@ function Users() {
                 <div className="alert alert-warning" role="alert">
                     User is not logged in
                 </div> : null
-            }
 
+            }
+            <Link className="btn btn-primary" to='/register'>New User</Link>
             {
-                users.length > 0 ?
+                users.length > 0  ?
                     users.map(item => {
 
 
@@ -55,6 +56,8 @@ function Users() {
                                         <h5 className=" mx-auto text-dark">{"test"}</h5>
                                         <h5 className=" mx-auto text-dark">{item.email}</h5>
                                         <h5 className=" mx-auto text-dark ">{item.type}</h5>
+                                        <h5 className=" mx-auto text-dark ">{item.total_days_taken}/{item.total_days}</h5>
+                                        <Link  to={"/user/"+item.id} className="btn btn-primary">Edit</Link>
                                         <div/>
                                     </div>
                                 </div>

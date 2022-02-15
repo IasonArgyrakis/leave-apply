@@ -15,10 +15,11 @@ const Register = () => {
     const [confirm_password, setConfirm_password] = React.useState(undefined)
     const [type, setType] = React.useState(undefined)
 
-    const [backendErrors, setBackendErrors] = React.useState(false)
+    const [backendErrors, setBackendErrors] = React.useState([])
 
     const handleChange = (event) => {
         event.preventDefault()
+        setBackendErrors([])
         switch (event.target.id) {
             case 'email':
                 setEmail(event.target.value)
@@ -39,6 +40,7 @@ const Register = () => {
 
     }
 
+
     const handleSubmit = (event) => {
         event.preventDefault()
 
@@ -51,27 +53,43 @@ const Register = () => {
 
         let config = {headers: {Accept: "application/json"}};
         let data = {
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            password: password,
-            confirm_password: confirm_password,
-            type: type
+            firstName: event.target.firstName.value,
+            lastName: event.target.lastName.value,
+            email: event.target.email.value,
+            password: event.target.password.value,
+            confirm_password: event.target.password_confirmation.value,
+            type: event.target.type.value
         }
-        console.log(data);
+        //console.log(data);
 
 
         axios
             .post('http://localhost/api/register/', data, config)
             .then(async function (response) {
-                console.log(response)
-                 dispatch(logged(response.data))
-
+                //console.log(response)
+                if (login.token == undefined) {
+                    console.log("user  signed in")
+                    dispatch(logged(response.data))
+                } else {
+                    console.log("new user  made")
+                }
 
 
             })
-            .catch(function (errors) {
-                console.log(errors);
+            .catch(function (error) {
+
+
+                let errors = error.response.data.errors
+                //console.log(errors)
+                let renderErrors = []
+                errors.map((item) => {
+                    renderErrors.push(<div className="alert alert-danger" role="alert">
+                        {item}
+                    </div>)
+                })
+
+                setBackendErrors(renderErrors)
+
 
             });
 
@@ -139,6 +157,8 @@ const Register = () => {
                             <input type="submit" value="Register" className="btn btn-info btn-block"/>
 
                         </form>
+                        {backendErrors}
+
                     </div>
                 </div>
             </div>

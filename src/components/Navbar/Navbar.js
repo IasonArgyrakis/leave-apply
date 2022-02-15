@@ -15,7 +15,7 @@ function Navbar() {
             .post('http://localhost/api/logout', config)
             .then(function (response) {
 
-                console.log(response.data)
+                //console.log(response.data)
 
                 dispatch(logged(false))
                 setloggedIn(false)

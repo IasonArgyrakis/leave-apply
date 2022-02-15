@@ -12,6 +12,7 @@ function LeaveSubmissionForm() {
     const [reason, setReason] = React.useState(undefined)
 
     const [submited, setSubmited] = React.useState(false)
+    const [submitedError, setSubmitedError] = React.useState({})
 
 
 
@@ -23,7 +24,6 @@ function LeaveSubmissionForm() {
 
         switch (event.target.id) {
             case 'startDate':
-
                 setStartDate(event.target.value)
                 break;
             case 'endDate':
@@ -46,6 +46,17 @@ function LeaveSubmissionForm() {
         }
 
     }
+    function renderSumbitionError() {
+
+        if(submitedError.errors==="Not enough days left"){
+            //console.log(submitedError.days_requested)
+            // setTimeout(()=>(setSubmitedError(false)), 3000)
+            return (<div className=" mt-2 alert alert-danger" role="alert">
+                {submitedError.errors}  days requested: {submitedError.days_requested} days left {submitedError.days_left}
+            </div>)
+        }
+
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault()
@@ -56,27 +67,43 @@ function LeaveSubmissionForm() {
         let config = {headers: {Accept: "application/json", Authorization: "Bearer " + login.token}};
         let data = {
 
-            start: event.target.startDate.value,
-            end: event.target.endDate.value,
-            reason:event.target.reason.value
+            start: startDate,
+            end: endDate,
+            reason:reason
 
         }
 
-        console.log(data);
+        //console.log(data);
 
         axios
             .post('http://localhost/api/my-applications/new', data, config)
             .then(function (response) {
 
-                console.log(response.data)
+                //console.log(response.data)
                 setSubmited(true)
+                let info={
+                    errors: response.data.errors,
+                    days_requested:response.data.days_requested ,
+                    days_left:response.data.days_left
+                }
+
+                setSubmitedError({...info})
 
 
             })
             .catch(function (error) {
+                //console.log(error.request)
+                let info={
+                    errors: error.errors,
+                    days_requested:error ,
+                    days_left:error
+
+                }
+
+                setSubmitedError({...info})
 
 
-                console.log(error)
+                //console.log(error)
 
             });
 
@@ -104,6 +131,7 @@ function LeaveSubmissionForm() {
                 <button type="submit" className="btn btn-primary">Submit</button>
             </form>
             {renderSumbition()}
+            {renderSumbitionError()}
         </div>)
 }
 
